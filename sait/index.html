@@ -16,27 +16,22 @@
                     <h2>Shine Cookies</h2>
                     <p>Добро пожаловать в магазин!</p>
                 </div>
-                
-                <div class="auth-tabs">
-                    <button class="tab-btn active" onclick="switchTab('login')">Вход</button>
-                    <button class="tab-btn" onclick="switchTab('register')">Регистрация</button>
-                </div>
+                <!-- В index.html и register.html добавьте: -->
+<script src="auth.js"></script>
+<!-- Вместо этого блока: -->
+<div class="auth-tabs">
+    <button class="tab-btn active" onclick="switchTab('login')">Вход</button>
+    <button class="tab-btn" onclick="switchTab('register')">Регистрация</button>
+</div>
 
-                <!-- Login Form -->
-                <form id="loginForm" class="auth-form active">
-                    <div class="form-group">
-                        <input type="email" id="loginEmail" placeholder="Email" required class="form-input">
-                    </div>
-                    <div class="form-group">
-                        <input type="password" id="loginPassword" placeholder="Пароль" required class="form-input">
-                    </div>
-                    <button type="submit" class="auth-btn">Войти</button>
-                    <div class="demo-credentials">
-                        <p>Демо доступ:</p>
-                        <p>Email: <strong>demo@shinecookies.ru</strong></p>
-                        <p>Пароль: <strong>demo123</strong></p>
-                    </div>
-                </form>
+<!-- Login Form -->
+<form id="loginForm" class="auth-form active">
+    <!-- ... существующая форма входа ... -->
+    
+    <div class="auth-links">
+        <p>Нет аккаунта? <a href="register.html" class="auth-link">Зарегистрируйтесь здесь</a></p>
+    </div>
+</form>
 
                 <!-- Register Form -->
                 <form id="registerForm" class="auth-form">
@@ -213,6 +208,78 @@
         <div class="bg-circle circle-3"></div>
     </div>
 
-    <script src="script.js"></script>
-</body>
-</html>
+<script src="script.js"></script>
+<script>
+    // Специальный скрипт для главной страницы
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('Главная страница загружена');
+        
+        // Инициализация данных
+        initializeData();
+        
+        // Проверяем авторизацию
+        const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        if (currentUser) {
+            console.log('Пользователь авторизован:', currentUser);
+            showMainApp();
+        } else {
+            console.log('Пользователь не авторизован');
+            showAuthModal();
+        }
+
+        // Обработка формы входа
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            console.log('Отправка формы входа');
+            
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+
+            console.log('Данные входа:', { email, password });
+
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+            const user = users.find(u => u.email === email && u.password === password);
+            
+            if (user) {
+                localStorage.setItem('currentUser', JSON.stringify(user));
+                
+                console.log('Пользователь вошел:', user);
+                showNotification('✅ Вход выполнен успешно!');
+                showMainApp();
+                
+                // Очистка формы
+                this.reset();
+            } else {
+                console.log('Неверные данные для входа');
+                showNotification('❌ Неверный email или пароль');
+            }
+        });
+
+        // Функция показа уведомлений
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: linear-gradient(45deg, #00ccff, #00ffaa);
+                color: #000;
+                padding: 15px 25px;
+                border-radius: 10px;
+                font-weight: bold;
+                z-index: 1000;
+                animation: slideInRight 0.3s ease;
+                border: 1px solid #00ccff;
+                box-shadow: 0 5px 15px rgba(0, 204, 255, 0.3);
+            `;
+            
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOutRight 0.3s ease';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+    });
+</script>

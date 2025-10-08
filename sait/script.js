@@ -83,20 +83,16 @@ function checkAuthStatus() {
     }
 }
 
-// Переключение между вкладками
+// Переключение между вкладками (только вход)
 function switchTab(tab) {
     console.log('Переключение на вкладку:', tab);
     
     document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
     document.querySelectorAll('.auth-form').forEach(form => form.classList.remove('active'));
     
-    if (tab === 'login') {
-        document.querySelector('.tab-btn:nth-child(1)').classList.add('active');
-        document.getElementById('loginForm').classList.add('active');
-    } else {
-        document.querySelector('.tab-btn:nth-child(2)').classList.add('active');
-        document.getElementById('registerForm').classList.add('active');
-    }
+    // Теперь только вход
+    document.querySelector('.tab-btn').classList.add('active');
+    document.getElementById('loginForm').classList.add('active');
 }
 
 // Показ модального окна авторизации
