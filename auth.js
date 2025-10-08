@@ -22,7 +22,7 @@ function initializeData() {
         console.log('Создан демо пользователь');
     }
 
-    // Создаем товары если их нет
+    // Создаем товары если их нет - УПРОЩЕННАЯ ВЕРСИЯ
     if (products.length === 0) {
         products = [
             {
@@ -30,42 +30,54 @@ function initializeData() {
                 name: "Steam Premium аккаунт",
                 price: 1500,
                 image: "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=400&h=250&fit=crop",
-                features: ["Уровень 50+", "10+ игр в библиотеке", "Гарантия 30 дней", "Полный доступ"]
+                category: "games",
+                features: ["Уровень 50+", "10+ игр в библиотеке", "Гарантия 30 дней", "Полный доступ"],
+                fileContent: "steam_accounts.txt"
             },
             {
                 id: 2,
                 name: "YouTube Premium",
                 price: 1200,
                 image: "https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=400&h=250&fit=crop",
-                features: ["Семейная подписка", "Без рекламы", "Фоновая работа", "Гарантия 60 дней"]
+                category: "streaming",
+                features: ["Семейная подписка", "Без рекламы", "Фоновая работа", "Гарантия 60 дней"],
+                fileContent: "youtube_accounts.txt"
             },
             {
                 id: 3,
                 name: "Spotify Premium",
                 price: 800,
                 image: "https://images.unsplash.com/photo-1611339555312-e607c8352fd7?w=400&h=250&fit=crop",
-                features: ["Высокое качество", "Без ограничений", "Оффлайн прослушивание", "Гарантия 90 дней"]
+                category: "streaming",
+                features: ["Высокое качество", "Без ограничений", "Оффлайн прослушивание", "Гарантия 90 дней"],
+                fileContent: "spotify_accounts.txt"
             },
             {
                 id: 4,
                 name: "Netflix 4K Premium",
                 price: 1800,
                 image: "https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?w=400&h=250&fit=crop",
-                features: ["4K Ultra HD", "4 устройства", "Без рекламы", "Гарантия 30 дней"]
+                category: "streaming",
+                features: ["4K Ultra HD", "4 устройства", "Без рекламы", "Гарантия 30 дней"],
+                fileContent: "netflix_accounts.txt"
             },
             {
                 id: 5,
                 name: "Discord Nitro",
                 price: 600,
                 image: "https://images.unsplash.com/photo-1614680376573-df3480f0c6ff?w=400&h=250&fit=crop",
-                features: ["HD видео", "Улучшенный звук", "Анимированные эмодзи", "Гарантия 60 дней"]
+                category: "other",
+                features: ["HD видео", "Улучшенный звук", "Анимированные эмодзи", "Гарантия 60 дней"],
+                fileContent: "discord_accounts.txt"
             },
             {
                 id: 6,
                 name: "Microsoft Office 365",
                 price: 900,
                 image: "https://images.unsplash.com/photo-1588690154757-badf464419d9?w=400&h=250&fit=crop",
-                features: ["Полный пакет", "1TB OneDrive", "Поддержка 5 устройств", "Гарантия 1 год"]
+                category: "software",
+                features: ["Полный пакет", "1TB OneDrive", "Поддержка 5 устройств", "Гарантия 1 год"],
+                fileContent: "office_accounts.txt"
             }
         ];
         localStorage.setItem('products', JSON.stringify(products));

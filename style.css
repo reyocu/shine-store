@@ -139,6 +139,8 @@ body {
     text-decoration: underline;
 }
 
+
+
 /* Dashboard Styles */
 .container {
     max-width: 1200px;
@@ -603,6 +605,60 @@ body {
     to { transform: translateX(100%); opacity: 0; }
 }
 
+/* Стили для платежной модалки */
+.payment-info {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.payment-info p {
+    margin: 10px 0;
+    font-size: 1.1rem;
+}
+
+.payment-status {
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 10px;
+    background: rgba(0, 204, 255, 0.1);
+    border: 1px solid #00ccff;
+}
+
+.check-pay {
+    background: linear-gradient(45deg, #ffd700, #ffed4e) !important;
+    color: #000 !important;
+}
+
+/* Стили для успешной покупки */
+.purchase-info {
+    text-align: center;
+}
+
+.purchase-info p {
+    margin: 10px 0;
+    font-size: 1.1rem;
+}
+
+.purchase-actions {
+    margin: 20px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.support-info {
+    margin-top: 20px;
+    padding: 15px;
+    background: rgba(0, 204, 255, 0.1);
+    border-radius: 10px;
+    border: 1px solid #00ccff33;
+}
+
+.support-info p {
+    margin: 5px 0;
+    font-size: 0.9rem;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     .main .container {
@@ -626,4 +682,79 @@ body {
     .auth-card {
         padding: 30px 20px;
     }
+}
+/* Стили для модальных окон */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(5px);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
+    background: rgba(10, 10, 10, 0.95);
+    border: 2px solid #00ccff;
+    border-radius: 15px;
+    padding: 30px;
+    max-width: 500px;
+    width: 90%;
+    box-shadow: 0 20px 40px rgba(0, 204, 255, 0.3);
+}
+
+.amount-display {
+    background: rgba(0, 204, 255, 0.1);
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+    margin: 15px 0;
+    font-size: 1.2rem;
+}
+
+.payment-instructions {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 15px;
+    border-radius: 10px;
+    margin: 15px 0;
+    text-align: left;
+}
+
+.payment-instructions ol {
+    margin: 10px 0;
+    padding-left: 20px;
+}
+
+.payment-instructions li {
+    margin: 8px 0;
+    font-size: 0.9rem;
+}
+
+.payment-instructions code {
+    background: rgba(0, 204, 255, 0.2);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: monospace;
+}
+
+.payment-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 20px 0;
+}
+
+.check-pay {
+    background: linear-gradient(45deg, #ffd700, #ffed4e) !important;
+    color: #000 !important;
+}
+
+.card-pay {
+    background: linear-gradient(45deg, #667eea, #764ba2) !important;
+    color: white !important;
 }
