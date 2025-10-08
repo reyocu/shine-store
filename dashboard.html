@@ -5,26 +5,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Магазин - Shine Cookies</title>
     <link rel="stylesheet" href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
     <!-- Header -->
     <header class="header">
-        <div class="container">
-            <div class="nav">
-                <div class="logo">
-                    <span class="logo-icon">🍪</span>
-                    <h1>Shine Cookies</h1>
+        <div class="nav">
+            <div class="logo">
+                <i class="fas fa-cookie-bite" style="color: #6366f1;"></i>
+                <span>Shine Cookies</span>
+            </div>
+            <div class="user-info">
+                <div class="user-balance">
+                    <i class="fas fa-wallet"></i>
+                    <span>Баланс:</span>
+                    <span class="balance-amount" id="userBalance">0 руб.</span>
+                    <button class="top-up-btn" onclick="showTopUpModal()">
+                        <i class="fas fa-plus"></i> Пополнить
+                    </button>
                 </div>
-                <div class="user-info">
-                    <div class="user-balance">
-                        <span class="balance-label">Баланс:</span>
-                        <span class="balance-amount" id="userBalance">0 руб.</span>
-                        <button class="top-up-btn" onclick="showTopUpModal()">💳 Пополнить</button>
-                    </div>
-                    <div class="user-menu">
-                        <span id="userName" class="user-name">Пользователь</span>
-                        <button class="logout-btn" onclick="logout()">🚪 Выйти</button>
-                    </div>
+                <div class="user-menu">
+                    <span id="userName" class="user-name">Пользователь</span>
+                    <button class="logout-btn" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i> Выйти
+                    </button>
                 </div>
             </div>
         </div>
@@ -32,48 +36,84 @@
 
     <!-- Main Content -->
     <main class="main">
-        <div class="container">
-            <!-- Products Grid -->
-            <section class="products-section">
-                <h2 class="section-title">🎮 Premium аккаунты</h2>
-                <div class="products-grid" id="productsGrid">
-                    <!-- Товары загружаются через JavaScript -->
+        <!-- Profile Section -->
+        <section class="profile-section">
+            <div class="profile-header">
+                <div class="profile-avatar">
+                    <i class="fas fa-user"></i>
                 </div>
-            </section>
+                <div class="profile-info">
+                    <h2 id="profileName">Пользователь</h2>
+                    <p id="profileEmail" style="color: var(--gray);">email@example.com</p>
+                </div>
+            </div>
+            
+            <div class="profile-stats">
+                <div class="stat-card">
+                    <div class="stat-value" id="statBalance">0</div>
+                    <div class="stat-label">Текущий баланс</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="statPurchases">0</div>
+                    <div class="stat-label">Всего покупок</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="statSpent">0</div>
+                    <div class="stat-label">Потрачено всего</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="statSince">0</div>
+                    <div class="stat-label">Дней с нами</div>
+                </div>
+            </div>
+        </section>
 
-            <!-- Sidebar -->
-            <aside class="sidebar">
-                <div class="stats-card">
-                    <h3>📊 Статистика</h3>
-                    <div class="stat-item">
-                        <span>Баланс:</span>
-                        <span id="balanceAmount">0 руб.</span>
-                    </div>
-                    <div class="stat-item">
-                        <span>Покупок:</span>
-                        <span id="purchasesCount">0</span>
-                    </div>
-                    <button class="history-btn" onclick="showPurchaseHistory()">📦 История покупок</button>
-                </div>
-
-                <div class="info-card">
-                    <h3>💳 Способы оплаты</h3>
-                    <div class="payment-methods-list">
-                        <div class="payment-method">💳 Банковские карты</div>
-                        <div class="payment-method">🤖 Crypto Bot</div>
-                        <div class="payment-method">📱 QIWI</div>
-                        <div class="payment-method">🪙 ЮMoney</div>
-                    </div>
-                </div>
-            </aside>
+        <!-- Products Section -->
+        <h2 class="section-title">
+            <i class="fas fa-gamepad"></i> Premium Аккаунты
+        </h2>
+        
+        <div class="products-grid" id="productsGrid">
+            <!-- Товары загружаются через JavaScript -->
         </div>
     </main>
 
-    <!-- Background Elements -->
-    <div class="bg-elements">
-        <div class="bg-circle circle-1"></div>
-        <div class="bg-circle circle-2"></div>
-        <div class="bg-circle circle-3"></div>
+    <!-- Payment Modal -->
+    <div id="paymentModal" class="modal">
+        <div class="modal-content">
+            <button class="close-modal" onclick="closePaymentModal()">&times;</button>
+            <h3><i class="fas fa-credit-card"></i> Пополнение баланса</h3>
+            
+            <div class="amount-selector" style="margin: 25px 0;">
+                <label style="display: block; margin-bottom: 10px; color: var(--primary); font-weight: 600;">
+                    Сумма пополнения (руб.):
+                </label>
+                <input type="number" id="topUpAmount" value="500" min="50" max="10000" 
+                       class="modal-input" style="font-size: 1.2rem; font-weight: 600;">
+            </div>
+
+            <div class="payment-methods">
+                <div class="payment-method" onclick="selectPaymentMethod('crypto')">
+                    <div class="payment-icon">🤖</div>
+                    <div style="font-weight: 600;">Crypto Bot</div>
+                    <div style="font-size: 0.8rem; color: var(--gray); margin-top: 5px;">USDT • BTC • ETH</div>
+                </div>
+                <div class="payment-method" onclick="selectPaymentMethod('card')">
+                    <div class="payment-icon">💳</div>
+                    <div style="font-weight: 600;">Банковская карта</div>
+                    <div style="font-size: 0.8rem; color: var(--gray); margin-top: 5px;">Visa • Mastercard • МИР</div>
+                </div>
+                <div class="payment-method" onclick="selectPaymentMethod('qiwi')">
+                    <div class="payment-icon">📱</div>
+                    <div style="font-weight: 600;">QIWI Кошелек</div>
+                    <div style="font-size: 0.8rem; color: var(--gray); margin-top: 5px;">Мгновенное пополнение</div>
+                </div>
+            </div>
+
+            <button id="processPaymentBtn" class="auth-btn" style="margin-top: 20px;" onclick="processPayment()">
+                <i class="fas fa-lock"></i> Перейти к оплате
+            </button>
+        </div>
     </div>
 
     <script src="auth.js"></script>
