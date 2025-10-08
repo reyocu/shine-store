@@ -114,25 +114,32 @@ function processPurchase(product) {
     deliverProduct(product);
 }
 
-// Выдача товара с генерацией файла
+// Выдача товара с генерацией файла - ИСПРАВЛЕННАЯ ВЕРСИЯ
 function deliverProduct(product) {
     console.log('Выдача товара:', product);
     
-    // Генерируем содержимое файла
-    const fileContent = generateFileContent(product);
-    
-    // Создаем и скачиваем файл
-    downloadFile(fileContent, product.fileContent, 'text/plain');
-    
-    // Показываем информацию о покупке
-    setTimeout(() => {
-        showPurchaseSuccessModal(product, fileContent);
-    }, 1000);
+    try {
+        // Генерируем содержимое файла
+        const fileContent = generateFileContent(product);
+        
+        // Создаем и скачиваем файл
+        downloadFile(fileContent, product.fileContent, 'text/plain');
+        
+        // Показываем информацию о покупке
+        setTimeout(() => {
+            showPurchaseSuccessModal(product, fileContent);
+        }, 500);
+    } catch (error) {
+        console.error('Ошибка выдачи товара:', error);
+        showNotification('❌ Ошибка при создании файла. Свяжитесь с поддержкой.');
+    }
 }
 
-// Генерация содержимого файла
+// Генерация содержимого файла - ИСПРАВЛЕННАЯ ВЕРСИЯ
 function generateFileContent(product) {
-    const timestamp = new Date().toLocaleString();
+    const timestamp = new Date().toLocaleString('ru-RU');
+    const orderId = 'SC' + Date.now().toString().slice(-8);
+    
     let content = '';
     
     switch(product.category) {
@@ -149,113 +156,32 @@ function generateFileContent(product) {
             content = generateDefaultAccounts(product);
     }
     
-    return `Shine Cookies - ${product.name}\n` +
-           `Заказ #${Date.now()}\n` +
-           `Дата: ${timestamp}\n` +
-           `Email: ${currentUser.email}\n` +
-           `=================================\n\n` +
-           content +
-           `\n\n=================================\n` +
-           `Поддержка: @shinecookies_support\n` +
-           `Сайт: shine-store.ru\n` +
-           `Удачных покупок! 🍪`;
+    return `╔══════════════════════════════════╗
+║           SHINE COOKIES           ║
+╚══════════════════════════════════╝
+
+🎯 Товар: ${product.name}
+💰 Стоимость: ${product.price} руб.
+📦 Заказ: #${orderId}
+📅 Дата: ${timestamp}
+📧 Покупатель: ${currentUser.email}
+
+══════════════════════════════════════
+
+${content}
+══════════════════════════════════════
+
+📞 Поддержка: @shinecookies_support
+🌐 Сайт: shine-store.ru
+
+💫 Спасибо за покупку! Удачного использования! 🍪`;
 }
 
-// Генерация игровых аккаунтов
-function generateGameAccounts(product) {
-    let accounts = '';
-    const count = product.price > 1000 ? 4 : 2; // Больше аккаунтов за дорогие товары
-    
-    for (let i = 1; i <= count; i++) {
-        accounts += `Аккаунт ${i}:\n`;
-        accounts += `Логин: shine_${generateRandomString(8)}@gmail.com\n`;
-        accounts += `Пароль: ${generateRandomString(12)}\n`;
-        
-        if (product.name.includes('Steam')) {
-            accounts += `Steam Guard: ${generateRandomCode(5)}\n`;
-        }
-        
-        accounts += `Доп. информация: ${product.features.join(', ')}\n\n`;
-    }
-    
-    return accounts;
-}
-
-// Генерация стриминговых аккаунтов
-function generateStreamingAccounts(product) {
-    let accounts = '';
-    const count = 3; // 3 аккаунта для стриминга
-    
-    for (let i = 1; i <= count; i++) {
-        accounts += `Аккаунт ${i}:\n`;
-        accounts += `Email: shine${generateRandomString(6)}@outlook.com\n`;
-        accounts += `Пароль: ${generateRandomString(10)}\n`;
-        accounts += `Срок действия: ${getFutureDate(30)}\n\n`;
-    }
-    
-    return accounts;
-}
-
-// Генерация ключей для софта
-function generateSoftwareKeys(product) {
-    let keys = '';
-    const count = product.name.includes('Windows') ? 1 : 2;
-    
-    for (let i = 1; i <= count; i++) {
-        if (product.name.includes('Windows')) {
-            keys += `Ключ Windows 11 Pro:\n`;
-            keys += `XXXXX-XXXXX-XXXXX-XXXXX-${generateRandomString(5).toUpperCase()}\n\n`;
-        } else {
-            keys += `Аккаунт ${i}:\n`;
-            keys += `Логин: shine_${generateRandomString(8)}@outlook.com\n`;
-            keys += `Пароль: ${generateRandomString(12)}\n\n`;
-        }
-    }
-    
-    return keys;
-}
-
-// Утилиты для генерации
-function generateRandomString(length) {
-    const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
-    let result = '';
-    for (let i = 0; i < length; i++) {
-        result += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
-    return result;
-}
-
-function generateRandomCode(length) {
-    const chars = '0123456789';
-    let result = '';
-    for (let i = 0; i < length; i++) {
-        result += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
-    return result;
-}
-
-function getFutureDate(days) {
-    const date = new Date();
-    date.setDate(date.getDate() + days);
-    return date.toLocaleDateString('ru-RU');
-}
-
-// Скачивание файла
-function downloadFile(content, fileName, mimeType) {
-    const blob = new Blob([content], { type: mimeType });
-    const url = URL.createObjectURL(blob);
-    
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = fileName;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
-}
-
-// Модальное окно успешной покупки
+// Модальное окно успешной покупки - ИСПРАВЛЕННАЯ ВЕРСИЯ
 function showPurchaseSuccessModal(product, fileContent) {
+    // Экранируем специальные символы для передачи в функцию
+    const escapedContent = fileContent.replace(/'/g, "\\'").replace(/\n/g, "\\n");
+    
     const modal = document.createElement('div');
     modal.className = 'modal';
     modal.style.display = 'flex';
@@ -263,21 +189,33 @@ function showPurchaseSuccessModal(product, fileContent) {
         <div class="modal-content">
             <h3>🎉 Поздравляем с покупкой!</h3>
             <div class="purchase-info">
-                <p><strong>Товар:</strong> ${product.name}</p>
-                <p><strong>Сумма:</strong> ${product.price} руб.</p>
-                <p><strong>Файл с данными автоматически скачан</strong></p>
+                <div style="text-align: center; margin: 15px 0;">
+                    <div style="font-size: 3rem;">🍪</div>
+                    <p style="color: #00ffaa; font-weight: bold;">Товар успешно приобретен!</p>
+                </div>
+                
+                <div style="background: rgba(0,204,255,0.1); padding: 15px; border-radius: 10px; margin: 15px 0;">
+                    <p><strong>Товар:</strong> ${product.name}</p>
+                    <p><strong>Сумма:</strong> ${product.price} руб.</p>
+                    <p><strong>Статус:</strong> <span style="color: #00ffaa;">✅ Успешно</span></p>
+                </div>
+                
+                <p style="text-align: center; margin: 15px 0;">
+                    <strong>Файл с данными автоматически скачан</strong><br>
+                    Если скачивание не началось, нажмите кнопку ниже
+                </p>
                 
                 <div class="purchase-actions">
-                    <button onclick="downloadAgain('${product.fileContent}', \`${fileContent.replace(/`/g, '\\`')}\`)" class="payment-btn">
-                        📥 Скачать еще раз
+                    <button onclick="downloadProductFile('${product.fileContent}', '${escapedContent}')" class="payment-btn crypto-pay">
+                        📥 Скачать файл с данными
                     </button>
-                    <button onclick="closeModal()" class="modal-cancel-btn">
-                        ❌ Закрыть
+                    <button onclick="closeCurrentModal()" class="modal-cancel-btn">
+                        ✅ Понятно
                     </button>
                 </div>
                 
                 <div class="support-info">
-                    <p>📞 Если возникли проблемы:</p>
+                    <p><strong>📞 Нужна помощь?</strong></p>
                     <p>Telegram: <strong>@shinecookies_support</strong></p>
                     <p>Email: <strong>support@shine-store.ru</strong></p>
                 </div>
@@ -288,82 +226,103 @@ function showPurchaseSuccessModal(product, fileContent) {
     document.body.appendChild(modal);
 }
 
-function downloadAgain(fileName, content) {
-    downloadFile(content, fileName, 'text/plain');
+// Функция для скачивания файла - ИСПРАВЛЕННАЯ ВЕРСИЯ
+function downloadProductFile(fileName, content) {
+    try {
+        // Восстанавливаем переносы строк
+        const restoredContent = content.replace(/\\n/g, '\n');
+        downloadFile(restoredContent, fileName, 'text/plain');
+        showNotification('📥 Файл скачан!');
+    } catch (error) {
+        console.error('Download error:', error);
+        showNotification('❌ Ошибка скачивания файла');
+    }
 }
 
-function closeModal() {
+// Улучшенная функция скачивания файла
+function downloadFile(content, fileName, mimeType) {
+    try {
+        const blob = new Blob([content], { type: mimeType });
+        const url = URL.createObjectURL(blob);
+        
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = fileName;
+        link.style.display = 'none';
+        
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        
+        // Освобождаем память
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+        
+        console.log('Файл успешно скачан:', fileName);
+        return true;
+    } catch (error) {
+        console.error('Ошибка скачивания файла:', error);
+        return false;
+    }
+}
+
+// Система пополнения баланса
+function showTopUpModal() {
+    const modal = document.createElement('div');
+    modal.className = 'modal';
+    modal.style.display = 'flex';
+    modal.innerHTML = `
+        <div class="modal-content">
+            <h3>💳 Пополнение баланса</h3>
+            <div class="modal-form">
+                <div class="amount-selector">
+                    <label>Сумма пополнения (руб.):</label>
+                    <input type="number" id="topUpAmount" value="100" min="10" max="10000" class="modal-input">
+                </div>
+                <div class="payment-methods">
+                    <h4>Способы оплаты:</h4>
+                    <button onclick="processCryptoPayment()" class="payment-btn crypto-pay">
+                        🤖 Crypto Bot (USDT)
+                    </button>
+                    <button onclick="processTestPayment()" class="payment-btn card-pay">
+                        💳 Тестовое пополнение
+                    </button>
+                </div>
+                <button onclick="closeCurrentModal()" class="modal-cancel-btn">❌ Отмена</button>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+}
+
+// Закрытие модального окна
+function closeCurrentModal() {
     const modal = document.querySelector('.modal');
     if (modal) {
         modal.remove();
     }
 }
 
-// Исправленная функция показа модального окна пополнения
-function showTopUpModal() {
-    // Создаем модальное окно если его нет
-    let modal = document.getElementById('topUpModal');
-    if (!modal) {
-        modal = document.createElement('div');
-        modal.id = 'topUpModal';
-        modal.className = 'modal';
-        modal.innerHTML = `
-            <div class="modal-content">
-                <h3>💳 Пополнение баланса</h3>
-                <div class="modal-form">
-                    <div class="amount-selector">
-                        <label>Сумма пополнения (USDT):</label>
-                        <input type="number" id="topUpAmount" value="10" min="1" class="modal-input">
-                    </div>
-                    <div class="payment-methods">
-                        <h4>Способы оплаты:</h4>
-                        <button onclick="processPayment('crypto')" class="payment-btn crypto-pay">
-                            🤖 Crypto Bot (USDT)
-                        </button>
-                        <button onclick="processTestPayment()" class="payment-btn card-pay">
-                            💳 Тестовое пополнение
-                        </button>
-                    </div>
-                    <button onclick="closeModal('topUpModal')" class="modal-cancel-btn">❌ Отмена</button>
-                </div>
-            </div>
-        `;
-        document.body.appendChild(modal);
-    }
-    
-    modal.style.display = 'flex';
-}
-
-// Закрытие модального окна
-function closeModal(modalId) {
-    const modal = document.getElementById(modalId);
-    if (modal) {
-        modal.style.display = 'none';
-    }
-}
-
 // Обработка платежа
-function processPayment(method) {
+function processCryptoPayment() {
     const amountInput = document.getElementById('topUpAmount');
     const amount = parseInt(amountInput.value);
     
-    if (!amount || amount < 1) {
-        showNotification('❌ Введите корректную сумму (мин. 1 USDT)');
+    if (!amount || amount < 10) {
+        showNotification('❌ Введите корректную сумму (мин. 10 руб.)');
         return;
     }
 
-    closeModal('topUpModal');
-    
-    if (method === 'crypto') {
-        processCryptoPayment(amount);
-    }
+    closeCurrentModal();
+    showCryptoPaymentModal(amount);
 }
 
-// Тестовое пополнение (для проверки)
+// Тестовое пополнение
 function processTestPayment() {
-    const amount = parseInt(document.getElementById('topUpAmount').value);
+    const amountInput = document.getElementById('topUpAmount');
+    const amount = parseInt(amountInput.value);
     
-    if (!amount || amount < 1) {
+    if (!amount || amount < 10) {
         showNotification('❌ Введите корректную сумму');
         return;
     }
@@ -383,97 +342,264 @@ function processTestPayment() {
         loadProducts();
         updateStats();
         
-        showNotification(`✅ Баланс пополнен на ${amount} USDT! (тестовый режим)`);
-        closeModal('topUpModal');
+        showNotification(`✅ Баланс пополнен на ${amount} руб.! (тестовый режим)`);
+        closeCurrentModal();
     }
 }
 
-<script src="payment.js"></script>
-
-// Обновление статистики
-function updateStats() {
-    if (!currentUser) return;
+// Модальное окно для Crypto Bot оплаты с реальной интеграцией
+async function showCryptoPaymentModal(amount) {
+    const usdtAmount = (amount / 100).toFixed(2); // Конвертация в USDT
     
-    document.getElementById('balanceAmount').textContent = currentUser.balance + ' руб.';
-    const purchaseCount = currentUser.purchases ? currentUser.purchases.length : 0;
-    document.getElementById('purchasesCount').textContent = purchaseCount;
-}
-
-// Показ истории покупок
-function showPurchaseHistory() {
-    if (!currentUser.purchases || currentUser.purchases.length === 0) {
-        alert('📦 История покупок пуста\n\nЗдесь будут отображаться ваши покупки');
-        return;
-    }
-    
-    const purchasesList = currentUser.purchases.map(purchase => 
-        `• ${purchase.productName} - ${purchase.price} руб. (${new Date(purchase.purchaseDate).toLocaleDateString()})`
-    ).join('\n');
-    
-    const totalSpent = currentUser.purchases.reduce((sum, purchase) => sum + purchase.price, 0);
-    
-    alert(`📦 История покупок:\n\n${purchasesList}\n\n💎 Всего потрачено: ${totalSpent} руб.\n💰 Текущий баланс: ${currentUser.balance} руб.`);
-}
-
-// Система пополнения баланса
-function showTopUpModal() {
-    document.getElementById('topUpModal').style.display = 'flex';
-}
-
-function closeModal(modalId) {
-    document.getElementById(modalId).style.display = 'none';
-}
-
-function processPayment(method) {
-    const amount = parseInt(document.getElementById('topUpAmount').value);
-    
-    if (!amount || amount < 10) {
-        showNotification('❌ Введите корректную сумму (мин. 10 руб.)');
-        return;
-    }
-
-    closeModal('topUpModal');
-    
-    switch(method) {
-        case 'card':
-            processCardPayment(amount);
-            break;
-        case 'crypto':
-            processCryptoPayment(amount);
-            break;
-        case 'other':
-            processOtherPayment(amount);
-            break;
+    try {
+        showNotification('🔄 Создание счета в Crypto Bot...');
+        
+        // Создаем инвойс через Crypto Bot API
+        const invoiceResult = await createCryptoBotInvoice(usdtAmount, amount);
+        
+        if (invoiceResult.success) {
+            showCryptoPaymentModalWithInvoice(amount, usdtAmount, invoiceResult.pay_url, invoiceResult.invoice_id);
+        } else {
+            showNotification('❌ Ошибка при создании счета: ' + invoiceResult.error);
+            // Показываем fallback вариант
+            showCryptoPaymentModalFallback(amount, usdtAmount);
+        }
+    } catch (error) {
+        console.error('Crypto Bot error:', error);
+        showNotification('❌ Ошибка подключения к Crypto Bot');
+        showCryptoPaymentModalFallback(amount, usdtAmount);
     }
 }
 
-function processCardPayment(amount) {
-    showNotification('🔄 Открытие платежной формы...');
+// Создание инвойса через Crypto Bot API
+async function createCryptoBotInvoice(usdtAmount, rubAmount) {
+    try {
+        const invoiceData = {
+            asset: 'USDT',
+            amount: usdtAmount,
+            description: `Пополнение баланса на shine-store.ru - ${rubAmount} руб.`,
+            paid_btn_name: 'viewItem',
+            paid_btn_url: 'https://shine-store.ru/dashboard.html',
+            payload: JSON.stringify({
+                userId: currentUser.id,
+                type: 'balance_topup',
+                amount: rubAmount,
+                email: currentUser.email
+            }),
+            allow_comments: false,
+            allow_anonymous: false
+        };
+
+        // ЗАМЕНИТЕ 'YOUR_CRYPTO_BOT_TOKEN' на ваш реальный токен из @CryptoBot
+        const response = await fetch('https://pay.crypt.bot/api/createInvoice', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Crypto-Pay-API-Token': 'YOUR_CRYPTO_BOT_TOKEN'
+            },
+            body: JSON.stringify(invoiceData)
+        });
+
+        const result = await response.json();
+        
+        if (result.ok) {
+            return {
+                success: true,
+                pay_url: result.result.pay_url,
+                invoice_id: result.result.invoice_id,
+                hash: result.result.hash
+            };
+        } else {
+            console.error('Crypto Bot API Error:', result);
+            return {
+                success: false,
+                error: result.error?.name || 'Unknown error'
+            };
+        }
+    } catch (error) {
+        console.error('Crypto Bot request failed:', error);
+        return {
+            success: false,
+            error: 'Network error'
+        };
+    }
+}
+
+// Модальное окно с реальной ссылкой на оплату
+function showCryptoPaymentModalWithInvoice(amount, usdtAmount, payUrl, invoiceId) {
+    const modal = document.createElement('div');
+    modal.className = 'modal';
+    modal.style.display = 'flex';
+    modal.innerHTML = `
+        <div class="modal-content">
+            <h3>💳 Оплата через Crypto Bot</h3>
+            <div class="payment-info">
+                <div class="amount-display">
+                    <strong>Сумма:</strong> ${amount} руб. (${usdtAmount} USDT)
+                </div>
+                <div class="payment-instructions">
+                    <p><strong>Счет создан! Для оплаты:</strong></p>
+                    <ol>
+                        <li>Нажмите кнопку "🔗 Перейти к оплате"</li>
+                        <li>Оплатите счет в Crypto Bot</li>
+                        <li>После оплаты нажмите "✅ Проверить оплату"</li>
+                        <li>Баланс обновится автоматически</li>
+                    </ol>
+                </div>
+                <div class="payment-buttons">
+                    <button onclick="window.open('${payUrl}', '_blank')" class="payment-btn crypto-pay">
+                        🔗 Перейти к оплате
+                    </button>
+                    <button onclick="checkCryptoPayment('${invoiceId}', ${amount})" class="payment-btn card-pay">
+                        ✅ Проверить оплату
+                    </button>
+                    <button onclick="closeCurrentModal()" class="modal-cancel-btn">
+                        ❌ Отмена
+                    </button>
+                </div>
+                <div class="payment-status" id="paymentStatus">
+                    ⏳ Ожидание оплаты...
+                </div>
+            </div>
+        </div>
+    `;
     
-    setTimeout(() => {
-        simulatePayment(amount, 'банковская карта');
-    }, 1500);
-}
-
-function processCryptoPayment(amount) {
-    showNotification('🔄 Перенаправление в Crypto Bot...');
+    document.body.appendChild(modal);
     
-    setTimeout(() => {
-        simulatePayment(amount, 'Crypto Bot');
-    }, 2000);
+    // Запускаем автоматическую проверку
+    startCryptoPaymentChecking(invoiceId, amount);
 }
 
-function processOtherPayment(amount) {
-    alert(`📱 Альтернативные методы оплаты\n\nСумма: ${amount} руб.\n\nДоступные методы:\n• QIWI\n• ЮMoney\n• СБП\n• Криптовалюты\n\nДля оплаты свяжитесь с поддержкой: @shinecookies_support`);
+// Fallback вариант если API не работает
+function showCryptoPaymentModalFallback(amount, usdtAmount) {
+    const modal = document.createElement('div');
+    modal.className = 'modal';
+    modal.style.display = 'flex';
+    modal.innerHTML = `
+        <div class="modal-content">
+            <h3>💳 Оплата через Crypto Bot</h3>
+            <div class="payment-info">
+                <div class="amount-display">
+                    <strong>Сумма:</strong> ${amount} руб. (${usdtAmount} USDT)
+                </div>
+                <div class="payment-instructions">
+                    <p><strong>Инструкция по оплате:</strong></p>
+                    <ol>
+                        <li>Откройте @CryptoBot в Telegram</li>
+                        <li>Нажмите "Crypto Pay" → "Create invoice"</li>
+                        <li>Сумма: <strong>${usdtAmount} USDT</strong></li>
+                        <li>Описание: "Пополнение баланса shine-store.ru"</li>
+                        <li>После оплаты нажмите "Подтвердить оплату"</li>
+                    </ol>
+                    <p><strong>Или отправьте ${usdtAmount} USDT на адрес:</strong></p>
+                    <p style="background: rgba(0,204,255,0.1); padding: 10px; border-radius: 5px; font-family: monospace; word-break: break-all;">
+                        TALnGAaUETzokzAwZRCdFmA1Dhg3pBSQZh
+                    </p>
+                </div>
+                <div class="payment-buttons">
+                    <button onclick="openCryptoBot()" class="payment-btn crypto-pay">
+                        📱 Открыть Crypto Bot
+                    </button>
+                    <button onclick="simulateCryptoPayment(${amount})" class="payment-btn card-pay">
+                        ✅ Тестовая оплата
+                    </button>
+                    <button onclick="closeCurrentModal()" class="modal-cancel-btn">
+                        ❌ Отмена
+                    </button>
+                </div>
+                <div class="payment-status" id="paymentStatus">
+                    ⏳ Ожидание оплаты...
+                </div>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
 }
 
-function simulatePayment(amount, method) {
+// Проверка статуса платежа
+async function checkCryptoPayment(invoiceId, amount) {
+    try {
+        const status = await getCryptoInvoiceStatus(invoiceId);
+        
+        if (status === 'paid') {
+            await completeCryptoPayment(amount, invoiceId);
+        } else if (status === 'active') {
+            document.getElementById('paymentStatus').innerHTML = 
+                '❌ Оплата еще не получена. Пожалуйста, оплатите счет и попробуйте снова.';
+        } else {
+            document.getElementById('paymentStatus').innerHTML = 
+                `❌ Статус: ${status}. Счет не оплачен.`;
+        }
+    } catch (error) {
+        document.getElementById('paymentStatus').innerHTML = 
+            '❌ Ошибка проверки платежа. Попробуйте позже.';
+    }
+}
+
+// Получение статуса инвойса
+async function getCryptoInvoiceStatus(invoiceId) {
+    try {
+        const response = await fetch(`https://pay.crypt.bot/api/getInvoices?invoice_ids=${invoiceId}`, {
+            headers: {
+                'Crypto-Pay-API-Token': '458065:AAyevV2X8IGYbHfLZfyqc7yMdXcFBA1e4uv'
+            }
+        });
+
+        const result = await response.json();
+        
+        if (result.ok && result.result.items.length > 0) {
+            return result.result.items[0].status; // active, paid, expired
+        }
+        
+        return 'unknown';
+    } catch (error) {
+        console.error('Check invoice error:', error);
+        return 'error';
+    }
+}
+
+// Автоматическая проверка платежа
+function startCryptoPaymentChecking(invoiceId, amount) {
+    let attempts = 0;
+    const maxAttempts = 30; // 5 минут (каждые 10 секунд)
+    
+    const checkInterval = setInterval(async () => {
+        attempts++;
+        const status = await getCryptoInvoiceStatus(invoiceId);
+        
+        if (status === 'paid') {
+            clearInterval(checkInterval);
+            await completeCryptoPayment(amount, invoiceId);
+        } else if (status === 'expired' || attempts >= maxAttempts) {
+            clearInterval(checkInterval);
+            document.getElementById('paymentStatus').innerHTML = 
+                '❌ Время оплаты истекло. Создайте новый счет.';
+        }
+    }, 10000); // Проверка каждые 10 секунд
+}
+
+// Завершение Crypto Bot платежа
+async function completeCryptoPayment(amount, invoiceId) {
     const users = JSON.parse(localStorage.getItem('users')) || [];
     const userIndex = users.findIndex(u => u.id === currentUser.id);
     
     if (userIndex !== -1) {
         users[userIndex].balance += amount;
         currentUser.balance += amount;
+        
+        // Добавляем запись о пополнении
+        if (!users[userIndex].topups) {
+            users[userIndex].topups = [];
+        }
+        
+        users[userIndex].topups.push({
+            amount: amount,
+            method: 'crypto_bot',
+            invoiceId: invoiceId,
+            date: new Date().toISOString(),
+            status: 'completed'
+        });
         
         localStorage.setItem('users', JSON.stringify(users));
         localStorage.setItem('currentUser', JSON.stringify(currentUser));
@@ -482,37 +608,14 @@ function simulatePayment(amount, method) {
         loadProducts();
         updateStats();
         
-        showNotification(`✅ Баланс пополнен на ${amount} руб. через ${method}!`);
+        document.getElementById('paymentStatus').innerHTML = 
+            '✅ Оплата получена! Баланс пополнен.';
+        
+        showNotification(`✅ Баланс пополнен на ${amount} руб.!`);
+        
+        // Автоматически закрываем через 3 секунды
+        setTimeout(() => {
+            closeCurrentModal();
+        }, 3000);
     }
 }
-
-// Закрытие модальных окон при клике вне их
-document.addEventListener('click', function(e) {
-    if (e.target.classList.contains('modal')) {
-        e.target.style.display = 'none';
-    }
-});
-
-// Предотвращение закрытия при клике на контент модалки
-document.querySelectorAll('.modal-content').forEach(content => {
-    content.addEventListener('click', function(e) {
-        e.stopPropagation();
-    });
-});
-// Обработчики для модальных окон
-document.addEventListener('click', function(e) {
-    // Закрытие модальных окон при клике вне их
-    if (e.target.classList.contains('modal')) {
-        e.target.style.display = 'none';
-    }
-});
-
-// Предотвращение закрытия при клике на контент модалки
-document.addEventListener('click', function(e) {
-    if (e.target.closest('.modal-content')) {
-        e.stopPropagation();
-    }
-});
-
-// Инициализация при загрузке
-console.log('Dashboard initialized');

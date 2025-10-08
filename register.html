@@ -45,23 +45,25 @@
 
     <script src="auth.js"></script>
     <script>
-        document.getElementById('registerForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const name = document.getElementById('registerName').value;
-            const email = document.getElementById('registerEmail').value;
-            const password = document.getElementById('registerPassword').value;
-            const confirmPassword = document.getElementById('confirmPassword').value;
-            
-            if (registerUser(name, email, password, confirmPassword)) {
+        document.addEventListener('DOMContentLoaded', function() {
+            // Если уже авторизован - перенаправить
+            if (getCurrentUser()) {
                 window.location.href = 'dashboard.html';
             }
-        });
 
-        // Если уже авторизован - перенаправить
-        if (getCurrentUser()) {
-            window.location.href = 'dashboard.html';
-        }
+            document.getElementById('registerForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const name = document.getElementById('registerName').value;
+                const email = document.getElementById('registerEmail').value;
+                const password = document.getElementById('registerPassword').value;
+                const confirmPassword = document.getElementById('confirmPassword').value;
+                
+                if (registerUser(name, email, password, confirmPassword)) {
+                    window.location.href = 'dashboard.html';
+                }
+            });
+        });
     </script>
 </body>
 </html>

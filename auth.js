@@ -22,7 +22,7 @@ function initializeData() {
         console.log('Создан демо пользователь');
     }
 
-    // Создаем товары если их нет - УПРОЩЕННАЯ ВЕРСИЯ
+    // Создаем товары если их нет
     if (products.length === 0) {
         products = [
             {

@@ -139,8 +139,6 @@ body {
     text-decoration: underline;
 }
 
-
-
 /* Dashboard Styles */
 .container {
     max-width: 1200px;
@@ -208,6 +206,11 @@ body {
     font-weight: bold;
     cursor: pointer;
     transition: all 0.3s ease;
+}
+
+.top-up-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 5px 15px rgba(0, 204, 255, 0.4);
 }
 
 .user-menu {
@@ -416,122 +419,6 @@ body {
     text-align: center;
 }
 
-/* Modals */
-.modal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.8);
-    backdrop-filter: blur(5px);
-    z-index: 1000;
-    align-items: center;
-    justify-content: center;
-}
-
-.modal-content {
-    background: rgba(10, 10, 10, 0.95);
-    border: 2px solid #00ccff;
-    border-radius: 15px;
-    padding: 30px;
-    max-width: 400px;
-    width: 90%;
-    box-shadow: 0 20px 40px rgba(0, 204, 255, 0.3);
-}
-
-.modal-content h3 {
-    color: #00ccff;
-    margin-bottom: 20px;
-    text-align: center;
-}
-
-.modal-form {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
-.amount-selector {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.amount-selector label {
-    color: #00ccff;
-    font-weight: bold;
-}
-
-.modal-input {
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid #00ccff33;
-    border-radius: 8px;
-    padding: 12px;
-    color: white;
-    font-size: 1.1rem;
-    text-align: center;
-    flex: 1;
-}
-
-.currency {
-    color: #00ccff;
-    font-weight: bold;
-}
-
-.payment-methods {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.payment-btn {
-    padding: 15px;
-    border: none;
-    border-radius: 8px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-size: 1rem;
-}
-
-.card-pay {
-    background: linear-gradient(45deg, #667eea, #764ba2);
-    color: white;
-}
-
-.crypto-pay {
-    background: linear-gradient(45deg, #00ccff, #00ffaa);
-    color: #000;
-}
-
-.other-pay {
-    background: rgba(255, 255, 255, 0.1);
-    color: white;
-    border: 1px solid #00ccff33;
-}
-
-.payment-btn:hover {
-    transform: scale(1.02);
-    box-shadow: 0 5px 15px rgba(0, 204, 255, 0.3);
-}
-
-.modal-cancel-btn {
-    background: rgba(255, 50, 50, 0.2);
-    color: #ff6b6b;
-    border: 1px solid #ff6b6b;
-    padding: 12px;
-    border-radius: 8px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.modal-cancel-btn:hover {
-    background: rgba(255, 50, 50, 0.3);
-}
-
 /* Background Elements */
 .bg-elements {
     position: fixed;
@@ -605,15 +492,155 @@ body {
     to { transform: translateX(100%); opacity: 0; }
 }
 
-/* Стили для платежной модалки */
-.payment-info {
-    text-align: center;
-    margin: 20px 0;
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(5px);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
 }
 
-.payment-info p {
-    margin: 10px 0;
+.modal-content {
+    background: rgba(10, 10, 10, 0.95);
+    border: 2px solid #00ccff;
+    border-radius: 15px;
+    padding: 30px;
+    max-width: 500px;
+    width: 90%;
+    box-shadow: 0 20px 40px rgba(0, 204, 255, 0.3);
+}
+
+.modal-content h3 {
+    color: #00ccff;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.modal-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.amount-selector {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.amount-selector label {
+    color: #00ccff;
+    font-weight: bold;
+}
+
+.modal-input {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid #00ccff33;
+    border-radius: 8px;
+    padding: 12px;
+    color: white;
     font-size: 1.1rem;
+    text-align: center;
+}
+
+.payment-methods {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.payment-methods h4 {
+    color: #00ccff;
+    margin-bottom: 10px;
+}
+
+.payment-btn {
+    padding: 15px;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+}
+
+.crypto-pay {
+    background: linear-gradient(45deg, #00ccff, #00ffaa);
+    color: #000;
+}
+
+.card-pay {
+    background: linear-gradient(45deg, #667eea, #764ba2);
+    color: white;
+}
+
+.payment-btn:hover {
+    transform: scale(1.02);
+    box-shadow: 0 5px 15px rgba(0, 204, 255, 0.3);
+}
+
+.modal-cancel-btn {
+    background: rgba(255, 50, 50, 0.2);
+    color: #ff6b6b;
+    border: 1px solid #ff6b6b;
+    padding: 12px;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.modal-cancel-btn:hover {
+    background: rgba(255, 50, 50, 0.3);
+}
+
+/* Payment Modal Specific */
+.amount-display {
+    background: rgba(0, 204, 255, 0.1);
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+    margin: 15px 0;
+    font-size: 1.2rem;
+}
+
+.payment-instructions {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 15px;
+    border-radius: 10px;
+    margin: 15px 0;
+    text-align: left;
+}
+
+.payment-instructions ol {
+    margin: 10px 0;
+    padding-left: 20px;
+}
+
+.payment-instructions li {
+    margin: 8px 0;
+    font-size: 0.9rem;
+}
+
+.payment-instructions code {
+    background: rgba(0, 204, 255, 0.2);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: monospace;
+}
+
+.payment-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 20px 0;
 }
 
 .payment-status {
@@ -622,14 +649,10 @@ body {
     border-radius: 10px;
     background: rgba(0, 204, 255, 0.1);
     border: 1px solid #00ccff;
+    text-align: center;
 }
 
-.check-pay {
-    background: linear-gradient(45deg, #ffd700, #ffed4e) !important;
-    color: #000 !important;
-}
-
-/* Стили для успешной покупки */
+/* Purchase Success Modal */
 .purchase-info {
     text-align: center;
 }
@@ -682,79 +705,8 @@ body {
     .auth-card {
         padding: 30px 20px;
     }
-}
-/* Стили для модальных окон */
-.modal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.8);
-    backdrop-filter: blur(5px);
-    z-index: 1000;
-    align-items: center;
-    justify-content: center;
-}
-
-.modal-content {
-    background: rgba(10, 10, 10, 0.95);
-    border: 2px solid #00ccff;
-    border-radius: 15px;
-    padding: 30px;
-    max-width: 500px;
-    width: 90%;
-    box-shadow: 0 20px 40px rgba(0, 204, 255, 0.3);
-}
-
-.amount-display {
-    background: rgba(0, 204, 255, 0.1);
-    padding: 15px;
-    border-radius: 10px;
-    text-align: center;
-    margin: 15px 0;
-    font-size: 1.2rem;
-}
-
-.payment-instructions {
-    background: rgba(255, 255, 255, 0.05);
-    padding: 15px;
-    border-radius: 10px;
-    margin: 15px 0;
-    text-align: left;
-}
-
-.payment-instructions ol {
-    margin: 10px 0;
-    padding-left: 20px;
-}
-
-.payment-instructions li {
-    margin: 8px 0;
-    font-size: 0.9rem;
-}
-
-.payment-instructions code {
-    background: rgba(0, 204, 255, 0.2);
-    padding: 2px 6px;
-    border-radius: 4px;
-    font-family: monospace;
-}
-
-.payment-buttons {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    margin: 20px 0;
-}
-
-.check-pay {
-    background: linear-gradient(45deg, #ffd700, #ffed4e) !important;
-    color: #000 !important;
-}
-
-.card-pay {
-    background: linear-gradient(45deg, #667eea, #764ba2) !important;
-    color: white !important;
+    
+    .modal-content {
+        padding: 20px;
+    }
 }
